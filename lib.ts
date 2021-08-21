@@ -6,13 +6,14 @@
 const NOTHING = Symbol("Nothing");
 
 // State is module-level, limitations not clear.
-const values: any = [NOTHING];
+const values: any[] = [NOTHING];
 let currentValue = 0;
 
 class Effect<T> {
     constructor(public readonly thunk: () => T | Promise<T>) {}
 }
 
+// TODO: implement an API similar to Promise.all to support parallel effects
 export function perform<T>(thunk: () => T | Promise<T>): T {
     const val = values[currentValue];
 
