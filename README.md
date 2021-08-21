@@ -8,7 +8,7 @@ Just `wrap` your main function and use `perform` for unpure things.
 
 ## Development
 
-I'm using Deno so I don't have to setup a Node project with Typescript and a silly package-json.
+I'm using Deno so I don't have to setup a Node project with Typescript and a silly package.json.
 
 To run the showcase do
 ```bash
