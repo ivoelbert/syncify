@@ -31,16 +31,19 @@ type Promisify<Fun extends AnyFunction> = (...args: Parameters<Fun>) => Promise<
 
 export function wrap<T extends AnyFunction>(f: T): Promisify<T> {
     const wrappedFunction: Promisify<T> = async (...args) => {
-        try {
-            return f(...args);
-        } catch (err) {
-            if (err instanceof Effect) {
-                values[currentValue] = await err.thunk();
-                values[currentValue + 1] = NOTHING;
-                currentValue = 0;
-                return wrappedFunction(...args);
-            } else {
-                throw err;
+        // Keep trying to call the wrapped function
+        // Once every effect is performed, it'll return.
+        for (;;) {
+            try {
+                return f(...args);
+            } catch (err) {
+                if (err instanceof Effect) {
+                    values[currentValue] = await err.thunk();
+                    values[currentValue + 1] = NOTHING;
+                    currentValue = 0;
+                } else {
+                    throw err;
+                }
             }
         }
     };
